@@ -27,7 +27,7 @@ export const signUp = async (
     });
 
     const result = Joi.validate(req.body, schema);
-    console.log(result);
+    next(result.error);
   } catch (error) {
     next(error);
   }

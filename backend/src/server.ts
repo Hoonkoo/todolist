@@ -3,11 +3,17 @@ import cors from "cors";
 import helmet from "helmet";
 import hpp from "hpp";
 import morgan from "morgan";
+import createError from "http-errors";
 
 import database from "~/database";
 import ApiRouter from "~/api";
 
 import "dotenv/config";
+
+interface HttpError {
+  statusCode?: number;
+  message: string;
+}
 
 const app = express();
 
@@ -22,7 +28,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api", ApiRouter);
 
-// app.use((error: Error, req: Request, res: Response, next: NextFunction) => {});
+// 404 error handling
+app.use((req: Request, res: Response, next: NextFunction) => {
+  next(createError(404));
+});
+
+// error handling
+app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
+  if (error) {
+    console.log(error.message, error.statusCode);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    return res.status(error.statusCode).send({
+      statusCode: error.statusCode,
+      message: error.message
+    });
+  }
+});
 
 app.listen(port, () => {
   console.log("server connected %s", port);
