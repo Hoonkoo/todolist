@@ -7,6 +7,6 @@ const router = express.Router();
 router.get("/", api.loadUser);
 
 // 유저 회원가입
-router.post("/sign-up", api.signUp);
+router.post("/sign_up", api.signUp);
 
 export default router;

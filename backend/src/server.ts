@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import hpp from "hpp";
@@ -21,6 +21,8 @@ app.use(hpp());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/api", ApiRouter);
+
+// app.use((error: Error, req: Request, res: Response, next: NextFunction) => {});
 
 app.listen(port, () => {
   console.log("server connected %s", port);
