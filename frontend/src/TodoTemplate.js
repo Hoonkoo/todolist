@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useState, useRef,useCallback } from 'react';
 import './TodoTemplate.scss';
 
 import TodoMain from './TodoMain';
@@ -10,7 +10,11 @@ const date_year = date.getFullYear();
 const date_month = date.getMonth()+1;
 const date_day = date.getDate();
 const new_date = (date_year +":"+ date_month +":"+ date_day);
-
+	
+var st_date = new Date()
+  .toISOString()
+  .substr(0, 10)
+  .replace("T", " ");
 
 const TodoTemplate = ( ) => {
     const [isLogged , setIsLogged ] = useState(true);
@@ -20,7 +24,7 @@ const TodoTemplate = ( ) => {
       id: 1,
       text: "1",
       isChecked: false,
-      date: new_date, 
+      date: st_date, 
       fk_user_id:1
     },
     {
@@ -39,10 +43,26 @@ const TodoTemplate = ( ) => {
     }
     ]);
 
+    const nextId = useRef(4);
+    
+    const onInsert = useCallback( text =>{
+        const todo = {
+          id : nextId.current,
+          text,
+          isChecked : false,
+          date: new_date,
+          fk_user_id : 1,
+        };        
+        setTodos(todos.concat(todo));
+        nextId.currnet += 1;
+    },
+      [todos],
+    );
+
     if (isLogged) {
         return (
             <TodoMain>
-                <TodoInput/>
+                <TodoInput onInsert={onInsert}/>
                 <TodoList todos={todos}/>
             </TodoMain>
         );    
