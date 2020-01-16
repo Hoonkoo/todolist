@@ -2,13 +2,18 @@ import React from 'react';
 
 import { MdDelete, MdCheckBoxOutlineBlank , MdCheckBox} from 'react-icons/md'
 
-const TodoListItem = ({ todo }) => {
+const TodoListItem = ({ todo, onRemove, onToggle }) => {
+    const { id } = todo
     return (
       <div className="TodoListItem">
         <div className="card">
-          {todo.isChecked ? <MdCheckBox/> : <MdCheckBoxOutlineBlank/>}
+          <div class="checkbox" onClick={() => onToggle(id)}>
+            {todo.isChecked ? <MdCheckBox/> : <MdCheckBoxOutlineBlank/>}
+          </div>
           {todo.text}
-          {todo.date}<MdDelete/>
+          <div className="remove" onClick={() => onRemove(id)}>
+            {todo.date}<MdDelete/>
+          </div>
         </div>
       </div>
     );

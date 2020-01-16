@@ -7,14 +7,14 @@ const TodoInput = ({ onInsert }) => {
   const onChange = useCallback(e => {
     setValue(e.target.value);
   }, []);
-
+  
   const onSubmit = useCallback(
     e => {
       onInsert(value);
       setValue(""); 
-      e.preventDefault();
+      e.preventDefault();      
     },
-    [onInsert, value]
+    [value, onInsert],
   );
 
   return (
@@ -23,7 +23,7 @@ const TodoInput = ({ onInsert }) => {
         type="text"
         placeholder="Write something to do"
         value={value}
-        onChange={onChange}
+        onChange={e => setValue(e.target.value)}
       />
       <button type="submit">
         <MdAdd />

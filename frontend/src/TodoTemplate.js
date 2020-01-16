@@ -18,7 +18,7 @@ var st_date = new Date()
 
 const TodoTemplate = ( ) => {
     const [isLogged , setIsLogged ] = useState(true);
-
+    
     const [todos, setTodos] = useState([
     {
       id: 1,
@@ -54,16 +54,33 @@ const TodoTemplate = ( ) => {
           fk_user_id : 1,
         };        
         setTodos(todos.concat(todo));
-        nextId.currnet += 1;
+        nextId.current += 1;
     },
       [todos],
     );
 
+    const onRemove = useCallback(
+      id => {
+        setTodos(todos.filter(todo => todo.id !== id));
+      },
+      [todos]
+    );
+
+    const onToggle = useCallback(
+      id => {
+        setTodos(
+          todos.map(todo =>
+            todo.id === id ? {...todo, isChecked: !todo.isChecked} : todo)
+        )
+      },
+      [todos],
+    );
     if (isLogged) {
         return (
             <TodoMain>
                 <TodoInput onInsert={onInsert}/>
-                <TodoList todos={todos}/>
+                <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle}/>
+                
             </TodoMain>
         );    
     } else {
