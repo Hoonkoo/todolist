@@ -1,9 +1,14 @@
 import React from 'react';
+import TodoDashBoardItem from './TodoDashBoardItem';
+
 
 const TodoDashBoard = () => {
     return (
         <div>
-            test
+            <TodoDashBoardItem/>
+            <TodoDashBoardItem/>
+            <TodoDashBoardItem/>
+            <TodoDashBoardItem/>
         </div>
     );
 };
