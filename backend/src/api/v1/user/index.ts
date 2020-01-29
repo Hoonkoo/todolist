@@ -1,4 +1,4 @@
-import express from "express";
+import * as express from "express";
 import * as api from "~/api/v1/user/user.ctrl";
 
 const router = express.Router();

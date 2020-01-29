@@ -1,22 +1,16 @@
-import mongoose from "mongoose";
+import * as mongoose from "mongoose";
 
-interface Database {
-  connect: Function;
+export default class Database {
+  public static connect() {
+    const { MONGO_URL: url } = process.env;
+
+    mongoose.connect(String(url));
+    const db = mongoose.connection;
+
+    db.on("error", console.error.bind(console, "connection error:"));
+    db.once("open", function(): void {
+      // we're connected!
+      console.log("db connected");
+    });
+  }
 }
-
-export default (function(): Database {
-  return {
-    connect(MONGO_URL: string): void {
-      mongoose.connect(`${MONGO_URL}`, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      });
-      const db = mongoose.connection;
-      db.on("error", console.error.bind(console, "connection error:"));
-      db.once("open", function(): void {
-        // we're connected!
-        console.log("db connected");
-      });
-    }
-  };
-})();
