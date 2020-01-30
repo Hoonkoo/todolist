@@ -78,6 +78,7 @@ const TodoTemplate = ( ) => {
       },
       [todos],
     );
+    
     if (isLogged) {
         return (
             <TodoMain>
