@@ -8,6 +8,7 @@ import TodoTemplate from './TodoTemplate';
 import TodoLogin from './TodoLogin';
 import TodoSignup from './TodoSignup';
 import TodoDashBoard from './TodoDashBoard';
+import TodoDashBoardTemplate from './TodoDashBoardTemplate';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route exact path="/" component={TodoTemplate}/>
         <Route path="/login" component={TodoLogin}/>
         <Route path="/signup" component={TodoSignup}/>
-        <Route path="/DashBoard" component={TodoDashBoard}/> 
+        <Route path="/DashBoard" component={TodoDashBoardTemplate}/> 
       </Switch>
       
     </>
