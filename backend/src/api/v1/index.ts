@@ -1,10 +1,9 @@
-import express from "express";
-import userRouter from "./user";
-import todoRouter from "./todo";
+import * as express from "express";
 
-const router = express.Router();
+const V1Router = express.Router();
 
-router.use("/user", userRouter);
-router.use("/todo", todoRouter);
+V1Router.use("/test", (req: express.Request, res: express.Response) => {
+  res.send("굿");
+});
 
-export default router;
+export default V1Router;
