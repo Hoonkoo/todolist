@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
-    "moduleResolution": "node",
-    "esModuleInterop": false,
-    "baseUrl": ".",
-    "paths": { "~/*": ["src/*"] }
+    "lib": ["ES5", "ES6", "ES2016", "ES2017", "ES2018", "ES2019", "ES2020"],
+    "target": "ES5",
+    "module": "CommonJS",
+    "baseUrl": "./src",
+    "outDir": "./build"
   }
 }

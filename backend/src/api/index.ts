@@ -1,8 +1,9 @@
 import * as express from "express";
+
 import V1Router from "./v1";
 
-const router = express.Router();
+const ApiRouter = express.Router();
 
-router.use("/v1", V1Router);
+ApiRouter.use("/v1", V1Router);
 
-export default router;
+export default ApiRouter;
