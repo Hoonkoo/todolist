@@ -1,12 +1,14 @@
+import "dotenv/config";
+
 import * as express from "express";
 import * as logger from "morgan";
 import * as cors from "cors";
-import * as dotenv from "dotenv";
+// import * as dotenv from "dotenv";
 import * as createError from "http-errors";
-
 import ApiRouter from "./api";
+import db from "./db";
 
-dotenv.config();
+// dotenv.config();
 
 const { DEV_PORT: port } = process.env;
 
@@ -41,4 +43,5 @@ app.use(
 
 app.listen(port, () => {
   console.log("server conneted in port : %s", port);
+  db.connect();
 });
