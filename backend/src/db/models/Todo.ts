@@ -4,8 +4,9 @@ import { IUserSchema } from "./User";
 export interface ITodoSchema extends mongoose.Document {
   title: string;
   content: string;
-  thumbnail: string;
+  thumbnail?: string;
   writer: IUserSchema["_id"];
+  flag: number;
 }
 
 const TodoSchema = new mongoose.Schema(
@@ -16,6 +17,11 @@ const TodoSchema = new mongoose.Schema(
     writer: {
       type: mongoose.Types.ObjectId,
       ref: "User"
+    },
+    flag: {
+      type: Number,
+      required: true,
+      default: 0
     }
   },
   {
@@ -26,4 +32,6 @@ const TodoSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model<ITodoSchema>("Todo", TodoSchema);
+export const Todo = mongoose.model<ITodoSchema>("Todo", TodoSchema);
+
+// export default Todo;

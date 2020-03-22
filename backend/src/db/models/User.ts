@@ -4,12 +4,15 @@ import { ITodoSchema } from "./Todo";
 export interface IUserSchema extends mongoose.Document {
   user_id: string;
   name: string;
+  todos?: Array<ITodoSchema["_id"]>;
+  lastLoggedIn: Date | null;
 }
 
 const UserSchema = new mongoose.Schema(
   {
-    userId: String,
-    name: String,
+    userId: { type: String, required: true },
+    password: { type: String, required: true },
+    name: { type: String, required: true },
     todos: [
       {
         type: mongoose.Types.ObjectId,
@@ -26,4 +29,6 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model<IUserSchema>("User", UserSchema);
+const User = mongoose.model<IUserSchema>("User", UserSchema);
+
+export default User;
