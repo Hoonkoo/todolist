@@ -3,12 +3,10 @@ import "dotenv/config";
 import * as express from "express";
 import * as logger from "morgan";
 import * as cors from "cors";
-// import * as dotenv from "dotenv";
 import * as createError from "http-errors";
-import ApiRouter from "./api";
-import db from "./db";
 
-// dotenv.config();
+import ApiRouter from "@/api";
+import db from "@/db";
 
 const { DEV_PORT: port } = process.env;
 
