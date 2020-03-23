@@ -1,13 +1,6 @@
 import * as mongoose from "mongoose";
-import { IUserSchema } from "./User";
 
-export interface ITodoSchema extends mongoose.Document {
-  title: string;
-  content: string;
-  thumbnail?: string;
-  writer: IUserSchema["_id"];
-  flag: number;
-}
+import { ITodoSchema } from "@/interfaces/ITodo";
 
 const TodoSchema = new mongoose.Schema(
   {
@@ -32,6 +25,6 @@ const TodoSchema = new mongoose.Schema(
   }
 );
 
-export const Todo = mongoose.model<ITodoSchema>("Todo", TodoSchema);
+const Todo = mongoose.model<ITodoSchema>("Todo", TodoSchema);
 
-// export default Todo;
+export default Todo;
