@@ -1,12 +1,6 @@
 import * as mongoose from "mongoose";
-import { ITodoSchema } from "./Todo";
 
-export interface IUserSchema extends mongoose.Document {
-  user_id: string;
-  name: string;
-  todos?: Array<ITodoSchema["_id"]>;
-  lastLoggedIn: Date | null;
-}
+import { IUserSchema } from "@/interfaces/IUser";
 
 const UserSchema = new mongoose.Schema(
   {
