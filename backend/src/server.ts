@@ -60,6 +60,7 @@ app.use(
     res: express.Response,
     next: express.NextFunction
   ) => {
+    console.log(error);
     res.status(error.status || 500).send(error.message);
   }
 );

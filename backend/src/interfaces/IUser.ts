@@ -3,7 +3,7 @@ import * as mongoose from "mongoose";
 import { ITodoSchema } from "./ITodo";
 
 export interface IUserSchema extends mongoose.Document {
-  user_id: string;
+  userId: string;
   password: string;
   name: string;
   todos?: Array<ITodoSchema["_id"]>;
