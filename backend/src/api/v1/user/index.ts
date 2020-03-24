@@ -1,7 +1,7 @@
 import * as express from "express";
 import { celebrate, Joi } from "celebrate";
 
-import { createUser } from "./user.ctrl";
+import { createUser, login } from "./user.ctrl";
 
 const UserRouter = express.Router();
 
@@ -11,6 +11,7 @@ const UserRouter = express.Router();
  *  user:
  *    type: object
  *    required:
+ *      - _id
  *      - user_id
  *      - name
  *      - lastLoggedIn
@@ -37,8 +38,46 @@ const UserRouter = express.Router();
 // load user
 UserRouter.get("/");
 
-// login
-UserRouter.post("/login");
+/**
+ * @swagger
+ *  /login:
+ *    post:
+ *      tags:
+ *      - user
+ *      produces:
+ *      - appliciation/json
+ *      summary: 로그인
+ *      parameters:
+ *        - name : id
+ *          in: body
+ *          description: 유저 아이디
+ *          require: true
+ *          type: string
+ *        - name : password
+ *          in: body
+ *          description: 비밀번호
+ *          require: true
+ *          type: string
+ *      responses:
+ *        200:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ *              user:
+ *                $ref: '#/definitions/user'
+ */
+UserRouter.post(
+  "/login",
+  celebrate({
+    body: Joi.object({
+      id: Joi.string().required(),
+      password: Joi.string().required()
+    })
+  }),
+  login
+);
 
 // logout
 UserRouter.post("/logout");
@@ -47,32 +86,33 @@ UserRouter.post("/logout");
  * @swagger
  *  /signup:
  *    post:
- *      summary: 회원가입
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                id:
- *                  type: string
- *                password:
- *                  type: string
- *                passwordConfirm:
- *                  type: string
- *                name:
- *                  type: string
- *              required:
- *                - id
- *                - password
- *                - passwordConfirm
- *                - name
  *      tags:
  *      - user
  *      produces:
  *      - appliciation/json
- *      response:
+ *      summary: 회원가입
+ *      parameters:
+ *        - name : id
+ *          in: body
+ *          description: 로그인 시 사용하는 유저 아이디
+ *          require: true
+ *          type: string
+ *        - name : password
+ *          in: body
+ *          description: 비밀번호
+ *          require: true
+ *          type: string
+ *        - name : passwordConfirm
+ *          in: body
+ *          description: 비밀번호 재확인
+ *          require: true
+ *          type: string
+ *        - name : name
+ *          in: body
+ *          description: 유저 이름
+ *          require: true
+ *          type: string
+ *      responses:
  *        200:
  *          schema:
  *            type: object
