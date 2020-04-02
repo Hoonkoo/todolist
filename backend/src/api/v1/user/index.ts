@@ -1,7 +1,8 @@
 import * as express from "express";
 import { celebrate, Joi } from "celebrate";
 
-import { createUser, login } from "./user.ctrl";
+import { createUser, login, loadUser } from "./user.ctrl";
+import { isLoggedIn } from "@/middlewares/auth";
 
 const UserRouter = express.Router();
 
@@ -36,7 +37,7 @@ const UserRouter = express.Router();
  */
 
 // load user
-UserRouter.get("/");
+UserRouter.get("/", isLoggedIn, loadUser);
 
 /**
  * @swagger
@@ -80,7 +81,7 @@ UserRouter.post(
 );
 
 // logout
-UserRouter.post("/logout");
+UserRouter.get("/logout");
 
 /**
  * @swagger
