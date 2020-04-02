@@ -1,7 +1,7 @@
 import * as createError from "http-errors";
 import * as bcrypt from "bcryptjs";
 
-import { IUserInputDTO } from "@/interfaces/IUser";
+import { IUserInputDTO, IUserSchema } from "@/interfaces/IUser";
 import db from "@/db";
 
 const createUser = async ({
@@ -33,14 +33,17 @@ const createUser = async ({
   await user.save();
 };
 
-const loginUser = async ({ id, password }: Partial<IUserInputDTO>) => {
+const loginUser = async ({
+  id,
+  password
+}: Partial<IUserInputDTO>): Promise<IUserSchema | null> => {
   const exUser = await db.Models.User.findOne({
     userId: id
   });
 
   // 아이디 체크
   if (!exUser) {
-    throw createError(400, "존재하지 않는 아이디입니다.");
+    throw createError(400, "아이디 또는 비밀번호가 일치하지 않습니다.");
   }
 
   const passwordCheck = await bcrypt.compare(
@@ -50,7 +53,7 @@ const loginUser = async ({ id, password }: Partial<IUserInputDTO>) => {
 
   // 비밀번호 체크
   if (!passwordCheck) {
-    throw createError(400, "패스워드가 일치하지 않습니다.");
+    throw createError(400, "아이디 또는 비밀번호가 일치하지 않습니다.");
   }
 
   const resultUser = Object.assign({}, exUser.toJSON());
