@@ -7,3 +7,9 @@ export interface IUserRequest extends Request {
   user?: IUserSchema;
   isAuthenticated?: boolean;
 }
+
+export interface IToken {
+  id: string;
+  iat: number;
+  exp: number;
+}
