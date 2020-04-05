@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import createHttpError = require("http-errors");
 
 import User from "@/db/models/User";
-import { IUserRequest } from "@/interfaces";
+import { IUserRequest, IToken } from "@/interfaces";
 
 export const isLoggedIn = (
   req: IUserRequest,
@@ -18,9 +18,9 @@ export const isLoggedIn = (
 };
 
 export default function auth() {
-  const { TOKEN_SECRET } = process.env;
+  const { TOKEN_SECRET, NODE_ENV, SUBDOMAIN } = process.env;
 
-  return async function(req: IUserRequest, res: Response, next: NextFunction) {
+  return async function (req: IUserRequest, res: Response, next: NextFunction) {
     try {
       const { token } = req.cookies;
 
@@ -28,7 +28,7 @@ export default function auth() {
 
       // 토큰 미존재시
       if (!token) {
-        next();
+        return next();
       }
 
       const decodedToken = await jwt.verify(token, TOKEN_SECRET!);
@@ -37,17 +37,27 @@ export default function auth() {
 
       // 유저 미존재시
       if (!user) {
-        next();
+        return next();
       }
-
-      const resultUser = Object.assign({}, user);
-
-      delete resultUser.password;
-
-      req.user = resultUser;
+      req.user = user;
       req.isAuthenticated = true;
 
-      next();
+      // 만료 시간이 30분 이전일때 재발급
+      if (
+        (decodedToken as { exp: number }).exp * 1000 - Number(new Date()) <=
+        1000 * 60 * 30
+      ) {
+        const encodeToken = await token.encodeToken(user!._id);
+
+        res.cookie("token", encodeToken, {
+          domain: NODE_ENV === "production" ? SUBDOMAIN! : undefined,
+          httpOnly: true,
+          secure: NODE_ENV === "production",
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 7h
+        });
+      }
+
+      return next();
     } catch (error) {
       next(error);
     }

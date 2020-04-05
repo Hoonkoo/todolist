@@ -12,9 +12,12 @@ export const loadUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.user!._doc);
-  // const resultUser = Object.assign({}, req.user!._doc);
-  return res.status(200).send({ message: "유저 정보를 조회하였습니다." });
+  const resultUser = Object.assign({}, req.user?.toJSON());
+
+  delete resultUser.password;
+  return res
+    .status(200)
+    .send({ message: "유저 정보를 조회하였습니다.", user: resultUser });
 };
 
 export const createUser = async (
@@ -50,10 +53,30 @@ export const login = async (
       domain: NODE_ENV === "production" ? SUBDOMAIN! : undefined,
       httpOnly: true,
       secure: NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7 // 7h
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7h
     });
 
     return res.status(200).send({ message: "로그인에 성공하였습니다.", user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.cookie("token", null, {
+      domain: NODE_ENV === "production" ? SUBDOMAIN! : undefined,
+      httpOnly: true,
+      secure: NODE_ENV === "production",
+      maxAge: 0, // 7h
+    });
+
+    // todo : redirect로 변경
+    return res.status(200).send({ message: "로그아웃하였습니다." });
   } catch (error) {
     next(error);
   }

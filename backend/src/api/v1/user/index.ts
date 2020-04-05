@@ -1,7 +1,7 @@
 import * as express from "express";
 import { celebrate, Joi } from "celebrate";
 
-import { createUser, login, loadUser } from "./user.ctrl";
+import { createUser, login, loadUser, logout } from "./user.ctrl";
 import { isLoggedIn } from "@/middlewares/auth";
 
 const UserRouter = express.Router();
@@ -36,6 +36,25 @@ const UserRouter = express.Router();
  *        description: 마지막 로그인 시간
  */
 
+/**
+ * @swagger
+ *  /:
+ *    get:
+ *      tags:
+ *      - user
+ *      produces:
+ *      - application/json
+ *      summary: 로그인 유저 정보 조회
+ *      parameters:
+ *      responses:
+ *        200:
+ *          schema:
+ *          properties:
+ *            message:
+ *              type: string
+ *            user:
+ *              $ref: '#/definitions/user'
+ */
 // load user
 UserRouter.get("/", isLoggedIn, loadUser);
 
@@ -74,14 +93,30 @@ UserRouter.post(
   celebrate({
     body: Joi.object({
       id: Joi.string().required(),
-      password: Joi.string().required()
-    })
+      password: Joi.string().required(),
+    }),
   }),
   login
 );
 
-// logout
-UserRouter.get("/logout");
+/**
+ * @swagger
+ * /logout:
+ *    get:
+ *      tags:
+ *      - user
+ *      produces:
+ *      - appliciation/json
+ *      summary: 로그아웃
+ *      response:
+ *        200:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              message:
+ *                type: string
+ */
+UserRouter.get("/logout", isLoggedIn, logout);
 
 /**
  * @swagger
@@ -128,8 +163,8 @@ UserRouter.post(
       id: Joi.string().required(),
       password: Joi.string().required(),
       passwordConfirm: Joi.string().required(),
-      name: Joi.string().required()
-    })
+      name: Joi.string().required(),
+    }),
   }),
   createUser
 );
